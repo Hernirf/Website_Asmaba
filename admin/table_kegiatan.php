@@ -1,9 +1,13 @@
 <?php
 session_start();
-if(!isset($_SESSION['userlogin'])){
-  header("Location: ../index.php");
-  exit;
+require '../konek.php';
+if(!isset($_SESSION['login'])){
+    echo "<script>
+        alert('Silahkan login terlebih dahulu');
+        document.location.href='../index.php';
+            </script> ";
 }
+$result = mysqli_query($db, "SELECT * FROM kegiatan");
 ?>
 
 <!DOCTYPE html>
@@ -75,7 +79,7 @@ if(!isset($_SESSION['userlogin'])){
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Data Warga Asmaba
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -83,6 +87,17 @@ if(!isset($_SESSION['userlogin'])){
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="tables_warga.php">Data Warga</a>
                                     <a class="nav-link" href="form.php">Form Tambah Data Warga</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePage" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="far fa-plus-square"></i></div>
+                                Buat Akun
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePage" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="akun_user.php">Akun Warga</a>
+                                    <a class="nav-link" href="akun_admin.php">Akun Admin</a>
                                 </nav>
                             </div>
                         </div>
@@ -111,40 +126,30 @@ if(!isset($_SESSION['userlogin'])){
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th>Nama Kegiatan</th>
                                             <th>Tanggal Pelaksanaan</th>
                                             <th>TSO Kegiatan</th>
+                                            <th colspan='2'>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Nama Kegiatan</th>
-                                            <th>Tanggal Pelaksanaan</th>
-                                            <th>TSO Kegiatan</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
+                                            <?php 
+                                                $i=1;
+                                                while($row = mysqli_fetch_array($result)){
+                                            ?>
                                         <tr>
-                                            <td>Piket Kamar Mandi</td>
-                                            <td>2022/10/12</td>
-                                            <td>Seluruh Astri Angkatan 2021 dan 2022</td>
+                                            <td> <?=$i; ?> </td>
+                                            <td> <?=$row['nama']?> </td>
+                                            <td> <?=$row['tso']?> </td>
+                                            <td> <?=$row['tgl_kegiatan']?> </td>
+                                            <td class="edit"><a  href="edit_kegiatan.php?id=<?=$row['id']?>"><i class="fa-solid fa-user-pen" style="color: green"></i></a></td>
+                                            <td class="hapus"><a  href="hapus_kegiatan.php?id=<?=$row['id']?>"><i class="fa-solid fa-trash" style="color: red"></i></a></td>
                                         </tr>
-                                        <tr>
-                                            <td>Rapat Astri</td>
-                                            <td>2022/10/15</td>
-                                            <td>Seluruh Astri</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Asmaba Times</td>
-                                            <td>2022/10/17</td>
-                                            <td>Seluruh Warga</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Astri Times</td>
-                                            <td>2022/10/19</td>
-                                            <td>Seluruh Astri</td>
-                                        </tr>
-
+                                        <?php
+                                            $i++;
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>

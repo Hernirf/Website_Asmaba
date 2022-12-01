@@ -1,13 +1,62 @@
 <?php
-session_start();
-if(!isset($_SESSION['login'])){
-    echo "<script>
-        alert('Silahkan login terlebih dahulu');
-        document.location.href='../index.php';
-            </script> ";
+require '../konek.php';
+
+if(isset($_GET['id'])){
+    $id=$_GET['id'];
 }
 
+$result=mysqli_query($db, 
+"SELECT * FROM data_warga WHERE id='$id'");
+$row=mysqli_fetch_array($result);
+
+if(isset($_POST['btn'])){
+    $nama=$_POST['nama'];
+    $nomorhp=$_POST['nomor_hp'];
+    $email=$_POST['email'];
+    $alamat=$_POST['alamat'];
+    $universitas=$_POST['universitas'];
+    $jurusan=$_POST['jurusan'];
+    $prodi=$_POST['prodi'];
+    $angkatan=$_POST['angkatan'];
+    $tgl_lahir=$_POST['tanggal'];
+    $gender=$_POST['gen'];
+
+
+    
+    $result = mysqli_query($db, 
+    "UPDATE data_warga SET
+    nama = '$nama',
+    nomorhp = '$nomorhp',
+    email = '$email',
+    alamat = '$alamat',
+    universitas = '$universitas',
+    jurusan = '$jurusan',
+    prodi = '$prodi',
+    angkatan = '$angkatan',
+    tgl_lahir = '$tgl_lahir',
+    gender = '$gender'
+    WHERE id='$id'");
+
+    if($result){
+        echo "
+            <script>
+                alert('Data warga Berhasil Diedit');
+                document.location.href='tables_warga.php';
+            </script>
+        ";
+    }else{
+        echo "
+            <script>
+                alert('Data warga Gagal Diedit');
+            </script>
+        ";
+    }
+}
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -225,17 +274,17 @@ if(!isset($_SESSION['login'])){
                             <li class="breadcrumb-item active"> Form Data Warga</li>
                         </ol>
                         <div class="main-block">
-                            <!-- <h1>Form Data Warga Asmaba</h1> -->
+                            <h1>Form Data Warga Asmaba</h1>
                             <form action="" method="post">
                                 <div class="info">
-                                    <input  type="text" name="nama" placeholder="Nama Lengkap" autocomplete="off">
-                                    <input type="text" name="nomor_hp" placeholder="Nomor WhatsApp" >
-                                    <input type="email" name="email" placeholder="Email" >
-                                    <input type="text" name="alamat" placeholder="Alamat" >
-                                    <input type="text" name="universitas" placeholder="Uviversitas" autocomplete="off">
-                                    <input type="text" name="jurusan" placeholder="Jurusan" autocomplete="off">
-                                    <input type="text" name="prodi" placeholder="Pogram studi" autocomplete="off">
-                                    <input type="number" name="angkatan" placeholder="Angkatan" autocomplete="off">
+                                    <input  type="text" name="nama" placeholder="Nama Lengkap" autocomplete="off" value=<?=$row['nama']?>>
+                                    <input type="text" name="nomor_hp" placeholder="Nomor WhatsApp" value=<?=$row['nomorhp']?>>
+                                    <input type="email" name="email" placeholder="Email" value=<?=$row['email']?>>
+                                    <input type="text" name="alamat" placeholder="Alamat" value=<?=$row['alamat']?>>
+                                    <input type="text" name="universitas" placeholder="Uviversitas" autocomplete="off" value=<?=$row['universitas']?>>
+                                    <input type="text" name="jurusan" placeholder="Jurusan" autocomplete="off" value=<?=$row['jurusan']?>>
+                                    <input type="text" name="prodi" placeholder="Pogram studi" autocomplete="off" value=<?=$row['prodi']?>>
+                                    <input type="number" name="angkatan" placeholder="Angkatan" autocomplete="off" value=<?=$row['angkatan']?>>
                                 </div>
                                 <p>Tanggal Lahir</p>
                                 <div class="info">
@@ -275,42 +324,7 @@ if(!isset($_SESSION['login'])){
     </body>
 </html>
 
-<?php
-require '../konek.php';
 
-if(isset($_POST['btn'])){
-    $nama=$_POST['nama'];
-    $nomorhp=$_POST['nomor_hp'];
-    $email=$_POST['email'];
-    $alamat=$_POST['alamat'];
-    $universitas=$_POST['universitas'];
-    $jurusan=$_POST['jurusan'];
-    $prodi=$_POST['prodi'];
-    $angkatan=$_POST['angkatan'];
-    $tgl_lahir=$_POST['tanggal'];
-    $gender=$_POST['gen'];
-    $result = mysqli_query($db, 
-    "INSERT INTO data_warga(nama, nomorhp, email, alamat ,universitas, jurusan, prodi, angkatan, tgl_lahir, gender) 
-    VALUES ('$nama', '$nomorhp', '$email', '$alamat', '$universitas', '$jurusan', '$prodi', '$angkatan', '$tgl_lahir', '$gender')");
-
-    if($result){
-        echo "
-            <script>
-                alert('Data Warga Berhasil Ditambah');
-                document.location.href='tables_warga.php';
-
-            </script>
-        ";
-    }else{
-        echo "
-            <script>
-                alert('Data warga Gagal Ditambah');
-                document.location.href='tables_warga.php';
-            </script>
-        ";
-    }
-}
-?>
 
 
 

@@ -1,8 +1,11 @@
 <?php
-session_start();
-if(!isset($_SESSION['userlogin'])){
-  header("Location: ../index.php");
-  exit;
+  session_start();
+  require '../konek.php';
+  if(!isset($_SESSION['login'])){
+    echo "<script>
+        alert('Silahkan login terlebih dahulu');
+        document.location.href='../index.php';
+            </script> ";
 }
 ?>
 
@@ -57,8 +60,8 @@ if(!isset($_SESSION['userlogin'])){
             <li><a class="nav-link scrollto" href="#about">About</a></li>
             <li><a class="nav-link scrollto " href="#portfolio">Dokumentasi</a></li>
             <!-- <li><a class="nav-link scrollto" href="#team">Kepengurusan 2021/2022</a></li> -->
-            <li><a href="../logout.php">Logout</a></li>
-            <li><a class="getstarted scrollto" href="#about">Kunjungi</a></li>
+            <li><a href="informasi.php">Informasi</a></li>
+            <li><a class="getstarted scrollto" href="../logout.php">Logout</a></li>
           </ul>
           <i class="bi bi-list mobile-nav-toggle"></i>
         </nav><!-- .navbar -->
@@ -70,9 +73,9 @@ if(!isset($_SESSION['userlogin'])){
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center">
     <div class="container text-center position-relative" data-aos="fade-in" data-aos-delay="200">
-      <h1>SELAMAT DATANG</h1>
+      <h1>SELAMAT DATANG WARGA</h1>
       <h2>Website Asrama Mahasiswa/i Balikpapan</h2>
-      <a href="#about" class="btn-get-started scrollto">Kunjungi</a>
+      <a href="informasi.php" class="btn-get-started scrollto">Informasi</a>
     </div>
   </section><!-- End Hero -->
 
@@ -124,9 +127,9 @@ if(!isset($_SESSION['userlogin'])){
       <div class="container">
 
         <div class="text-center" data-aos="zoom-in">
-          <h3>Join With Us</h3>
-          <p>Daftarkan diri dan gabung ke Asmaba, Asrama yang terjamin akan kebersihan dan keamanannya.</p>
-          <a class="cta-btn" href="#">Skuy Join</a>
+          <!-- <h3>Join With Us</h3>
+          <p>Daftarkan diri dan gabung ke Asmaba, Asrama yang terjamin akan kebersihan dan keamanannya.</p> -->
+          <a class="cta-btn" href="informasi.php">Informasi</a>
         </div>
 
       </div>

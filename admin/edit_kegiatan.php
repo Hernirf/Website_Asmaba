@@ -1,13 +1,45 @@
 <?php
-session_start();
-if(!isset($_SESSION['login'])){
-    echo "<script>
-        alert('Silahkan login terlebih dahulu');
-        document.location.href='../index.php';
-            </script> ";
+require '../konek.php';
+
+if(isset($_GET['id'])){
+    $id=$_GET['id'];
 }
 
+$result=mysqli_query($db, 
+"SELECT * FROM kegiatan WHERE id='$id'");
+$row=mysqli_fetch_array($result);
+
+if(isset($_POST['btn'])){
+    $nama=$_POST['nama'];
+    $tso=$_POST['tso'];
+    $tgl_kegiatan=$_POST['tanggal_kegiatan'];
+    
+    $result = mysqli_query($db, 
+    "UPDATE kegiatan SET
+    nama = '$nama', 
+    tso = '$tso', 
+    tgl_kegiatan = '$tgl_kegiatan'
+    WHERE id='$id'");
+
+    if($result){
+        echo "
+            <script>
+                alert('Jadwal kegiatan Berhasil Ditambah');
+                document.location.href ='table_kegiatan.php';
+
+            </script>
+        ";
+    }else{
+        echo "
+            <script>
+                alert('Jadwal kegiatan Gagal Ditambah');
+                document.location.href ='table_kegiatan.php';
+            </script>
+        ";
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +57,7 @@ if(!isset($_SESSION['login'])){
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
-      html, body {
+       html, body {
       height: 100%;
       }
 
@@ -38,13 +70,17 @@ if(!isset($_SESSION['login'])){
       color: #eee;
       }
 
-      h1 {
+      h1, h3 {
       font-weight: 400;
       }
 
       h1 {
       font-size: 32px;
       color:black;
+      }
+
+      h3 {
+      color: blac;
       }
 
       .main-block, .info {
@@ -82,41 +118,7 @@ if(!isset($_SESSION['login'])){
       .metod {
       display: flex; 
       }
-      input[type=radio] {
-      display: none;
-      }
-      label.radio {
-      position: relative;
-      display: inline-block;
-      margin-right: 20px;
-      text-indent: 32px;
-      cursor: pointer;
-      }
-      label.radio:before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 17px;
-      height: 17px;
-      border-radius: 50%;
-      border: 2px solid #1c87c9;
-      }
-      label.radio:after {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 4px;
-      top: 5px;
-      left: 5px;
-      border-bottom: 3px solid #1c87c9;
-      border-left: 3px solid #1c87c9;
-      transform: rotate(-45deg);
-      opacity: 0;
-      }
-      input[type=radio]:checked + label:after {
-      opacity: 1;
-      }
+      
       button {
       display: block;
       width: 200px;
@@ -219,42 +221,25 @@ if(!isset($_SESSION['login'])){
             <div id="layoutSidenav_content">
                 <main>
                 <div class="container-fluid px-4">
-                        <h1 class="mt-4">Form Tambah Data Warga</h1>
+                        <h1 class="mt-4">Form Tambah Jadwal Kegiatan</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active"> Form Data Warga</li>
+                            <li class="breadcrumb-item active"> Form Kegiatan</li>
                         </ol>
                         <div class="main-block">
-                            <!-- <h1>Form Data Warga Asmaba</h1> -->
-                            <form action="" method="post">
+                            <h1>Form Tambah Jadwal Kegiatan</h1>
+                            <form action="" method = "post">
                                 <div class="info">
-                                    <input  type="text" name="nama" placeholder="Nama Lengkap" autocomplete="off">
-                                    <input type="text" name="nomor_hp" placeholder="Nomor WhatsApp" >
-                                    <input type="email" name="email" placeholder="Email" >
-                                    <input type="text" name="alamat" placeholder="Alamat" >
-                                    <input type="text" name="universitas" placeholder="Uviversitas" autocomplete="off">
-                                    <input type="text" name="jurusan" placeholder="Jurusan" autocomplete="off">
-                                    <input type="text" name="prodi" placeholder="Pogram studi" autocomplete="off">
-                                    <input type="number" name="angkatan" placeholder="Angkatan" autocomplete="off">
+                                    <input  type="text" name="nama" placeholder="Nama Kegiatan" autocomplete="off" value=<?=$row['nama']?>>
+                                    <input type="text" name="tso" placeholder="TSO Kegiatan" autocomplete="off" value=<?=$row['tso']?>>
                                 </div>
-                                <p>Tanggal Lahir</p>
+                                <p>Tanggal Kegiatan</p>
                                 <div class="info">
-                                     <input type="date" name="tanggal" placeholder="Tanggal Lahir">
+                                <input type="date" name="tanggal_kegiatan">
                                 </div>
-                                <p>Jenis Kelamin</p>
-                                <div class="metod">
-                                    <div> 
-                                        <input type="radio" value="Laki-laki" id="radioOne" name ="gen"/>
-                                        <label for="radioOne" class="radio">Laki-laki</label>
-                                    </div>
-                                <div>
-                                    <input type="radio" value="Perempuan" id="radioTwo" name ="gen" />
-                                    <label for="radioTwo" class="radio">Perempuan</label>
-                                </div>
-                                <button class="button" name ="btn">Simpan</button>
+                                <button name ="btn" class="button">Simpan</button>
                             </form>
-                            </div>
-                    </div>
+                        </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -274,74 +259,6 @@ if(!isset($_SESSION['login'])){
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
-
-<?php
-require '../konek.php';
-
-if(isset($_POST['btn'])){
-    $nama=$_POST['nama'];
-    $nomorhp=$_POST['nomor_hp'];
-    $email=$_POST['email'];
-    $alamat=$_POST['alamat'];
-    $universitas=$_POST['universitas'];
-    $jurusan=$_POST['jurusan'];
-    $prodi=$_POST['prodi'];
-    $angkatan=$_POST['angkatan'];
-    $tgl_lahir=$_POST['tanggal'];
-    $gender=$_POST['gen'];
-    $result = mysqli_query($db, 
-    "INSERT INTO data_warga(nama, nomorhp, email, alamat ,universitas, jurusan, prodi, angkatan, tgl_lahir, gender) 
-    VALUES ('$nama', '$nomorhp', '$email', '$alamat', '$universitas', '$jurusan', '$prodi', '$angkatan', '$tgl_lahir', '$gender')");
-
-    if($result){
-        echo "
-            <script>
-                alert('Data Warga Berhasil Ditambah');
-                document.location.href='tables_warga.php';
-
-            </script>
-        ";
-    }else{
-        echo "
-            <script>
-                alert('Data warga Gagal Ditambah');
-                document.location.href='tables_warga.php';
-            </script>
-        ";
-    }
-}
-?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,11 +1,13 @@
 <?php
 session_start();
-if(!isset($_SESSION['userlogin'])){
-  header("Location: ../index.php");
-  exit;
+if(!isset($_SESSION['login'])){
+    echo "<script>
+        alert('Silahkan login terlebih dahulu');
+        document.location.href='../index.php';
+            </script> ";
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -158,7 +160,7 @@ if(!isset($_SESSION['userlogin'])){
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Data Warga Asmaba
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -168,6 +170,18 @@ if(!isset($_SESSION['userlogin'])){
                                     <a class="nav-link" href="form.php">Form Tambah Data Warga</a>
                                 </nav>
                             </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePage" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="far fa-plus-square"></i></div>
+                                Buat Akun
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePage" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="akun_user.php">Akun Warga</a>
+                                    <a class="nav-link" href="akun_admin.php">Akun Admin</a>
+                                </nav>
+                            </div>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -180,17 +194,17 @@ if(!isset($_SESSION['userlogin'])){
                             <li class="breadcrumb-item active"> Form Kegiatan</li>
                         </ol>
                         <div class="main-block">
-                            <h1>Form Tambah Jadwal Kegiatan</h1>
-                            <form action="/">
+                            <!-- <h1>Form Tambah Jadwal Kegiatan</h1> -->
+                            <form action="" method = "post">
                                 <div class="info">
-                                    <input  type="text" name="name" placeholder="Nama Kegiatan" autocomplete="off">
+                                    <input  type="text" name="nama" placeholder="Nama Kegiatan" autocomplete="off">
                                     <input type="text" name="tso" placeholder="TSO Kegiatan" autocomplete="off">
                                 </div>
                                 <p>Tanggal Kegiatan</p>
                                 <div class="info">
                                 <input type="date" name="tanggal_kegiatan">
                                 </div>
-                                <button href="/" class="button">Simpan</button>
+                                <button name ="btn" class="button">Simpan</button>
                             </form>
                         </div>
                 </main>
@@ -213,6 +227,37 @@ if(!isset($_SESSION['userlogin'])){
     </body>
 </html>
 
+
+<?php
+require '../konek.php';
+
+if(isset($_POST['btn'])){
+    $nama=$_POST['nama'];
+    $tso=$_POST['tso'];
+    $tgl_kegiatan=$_POST['tanggal_kegiatan'];
+    
+    $result = mysqli_query($db, 
+    "INSERT INTO kegiatan(nama, tso, tgl_kegiatan) 
+    VALUES ('$nama', '$tso', '$tgl_kegiatan')");
+
+    if($result){
+        echo "
+            <script>
+                alert('Jadwal kegiatan Berhasil Ditambah');
+                document.location.href='table_kegiatan.php';
+
+            </script>
+        ";
+    }else{
+        echo "
+            <script>
+                alert('Jadwal kegiatan Gagal Ditambah');
+                document.location.href='table_kegiatan.php';
+            </script>
+        ";
+    }
+}
+?>
 
 
 

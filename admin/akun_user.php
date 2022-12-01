@@ -1,5 +1,6 @@
 <?php
 session_start();
+require '../konek.php';
 if(!isset($_SESSION['login'])){
     echo "<script>
         alert('Silahkan login terlebih dahulu');
@@ -7,6 +8,48 @@ if(!isset($_SESSION['login'])){
             </script> ";
 }
 
+if(isset($_POST['btn'])){
+    $email=$_POST['email'];
+    $username=$_POST['username'];
+    $pass=$_POST['pass'];
+    $cpass=$_POST['cpass'];
+    $level = $_POST['status'];
+
+    // cek username udah digunakan apa belum
+
+    $sql = "SELECT * FROM akun where username='{$username}' AND levels = '{$level}' ";
+    $cek = $db->query($sql);
+
+    if (mysqli_num_rows($cek)>0){
+        echo "<script>
+        alert('Username sudah digunakan, silahkan menggunakan username yang lain') </script> ";
+    }
+    else {
+        if ($pass==$cpass){
+            $pass=password_hash($pass, PASSWORD_DEFAULT);
+            $query = "INSERT INTO akun (email, username, pass, levels) VALUES ('$email', '$username','$pass','$level')";
+            $result=$db->query($query);
+        
+            if ($result){
+                echo "<script>
+                    alert('Tambah akun warga berhasil')
+                    document.location.href='index.php';
+                     </script> ";
+            }
+            else{
+                echo "<script>
+                    alert('Tambah akun warga gagal')
+                     </script> ";
+            }
+            
+        }
+        else{
+            echo "<script>
+                    alert('Password konfimasi tidak sama dengan password')
+                     </script> ";
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +68,7 @@ if(!isset($_SESSION['login'])){
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet' type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <style>
-      html, body {
+       html, body {
       height: 100%;
       }
 
@@ -38,13 +81,17 @@ if(!isset($_SESSION['login'])){
       color: #eee;
       }
 
-      h1 {
+      h1, h3 {
       font-weight: 400;
       }
 
       h1 {
       font-size: 32px;
       color:black;
+      }
+
+      h3 {
+      color: blac;
       }
 
       .main-block, .info {
@@ -82,41 +129,7 @@ if(!isset($_SESSION['login'])){
       .metod {
       display: flex; 
       }
-      input[type=radio] {
-      display: none;
-      }
-      label.radio {
-      position: relative;
-      display: inline-block;
-      margin-right: 20px;
-      text-indent: 32px;
-      cursor: pointer;
-      }
-      label.radio:before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 17px;
-      height: 17px;
-      border-radius: 50%;
-      border: 2px solid #1c87c9;
-      }
-      label.radio:after {
-      content: "";
-      position: absolute;
-      width: 8px;
-      height: 4px;
-      top: 5px;
-      left: 5px;
-      border-bottom: 3px solid #1c87c9;
-      border-left: 3px solid #1c87c9;
-      transform: rotate(-45deg);
-      opacity: 0;
-      }
-      input[type=radio]:checked + label:after {
-      opacity: 1;
-      }
+      
       button {
       display: block;
       width: 200px;
@@ -213,48 +226,29 @@ if(!isset($_SESSION['login'])){
                                 </nav>
                             </div>
                     </div>
-                    </div>
                 </nav>
             </div>
             <div id="layoutSidenav_content">
                 <main>
                 <div class="container-fluid px-4">
-                        <h1 class="mt-4">Form Tambah Data Warga</h1>
+                        <h1 class="mt-4">Buat Akun Warga</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-                            <li class="breadcrumb-item active"> Form Data Warga</li>
+                            <li class="breadcrumb-item active"> Akun Warga</li>
                         </ol>
                         <div class="main-block">
-                            <!-- <h1>Form Data Warga Asmaba</h1> -->
-                            <form action="" method="post">
+                            <!-- <h1>Form Tambah Jadwal Kegiatan</h1> -->
+                            <form action="" method = "post">
                                 <div class="info">
-                                    <input  type="text" name="nama" placeholder="Nama Lengkap" autocomplete="off">
-                                    <input type="text" name="nomor_hp" placeholder="Nomor WhatsApp" >
-                                    <input type="email" name="email" placeholder="Email" >
-                                    <input type="text" name="alamat" placeholder="Alamat" >
-                                    <input type="text" name="universitas" placeholder="Uviversitas" autocomplete="off">
-                                    <input type="text" name="jurusan" placeholder="Jurusan" autocomplete="off">
-                                    <input type="text" name="prodi" placeholder="Pogram studi" autocomplete="off">
-                                    <input type="number" name="angkatan" placeholder="Angkatan" autocomplete="off">
+                                    <input type="text" name="email" required autocomplete="off" placeholder="Email">
+                                    <input  type="text" name="username" placeholder="Username" autocomplete="off"  required>
+                                    <input  type="password" name="pass" placeholder="Password"  required>
+                                    <input  type="password" name="cpass" placeholder="Konfimasi Password"  required>
+                                    <input type="hidden" name="status" value = "Warga">
                                 </div>
-                                <p>Tanggal Lahir</p>
-                                <div class="info">
-                                     <input type="date" name="tanggal" placeholder="Tanggal Lahir">
-                                </div>
-                                <p>Jenis Kelamin</p>
-                                <div class="metod">
-                                    <div> 
-                                        <input type="radio" value="Laki-laki" id="radioOne" name ="gen"/>
-                                        <label for="radioOne" class="radio">Laki-laki</label>
-                                    </div>
-                                <div>
-                                    <input type="radio" value="Perempuan" id="radioTwo" name ="gen" />
-                                    <label for="radioTwo" class="radio">Perempuan</label>
-                                </div>
-                                <button class="button" name ="btn">Simpan</button>
+                                <button name ="btn" class="button">Simpan</button>
                             </form>
-                            </div>
-                    </div>
+                        </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -274,74 +268,3 @@ if(!isset($_SESSION['login'])){
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
-
-<?php
-require '../konek.php';
-
-if(isset($_POST['btn'])){
-    $nama=$_POST['nama'];
-    $nomorhp=$_POST['nomor_hp'];
-    $email=$_POST['email'];
-    $alamat=$_POST['alamat'];
-    $universitas=$_POST['universitas'];
-    $jurusan=$_POST['jurusan'];
-    $prodi=$_POST['prodi'];
-    $angkatan=$_POST['angkatan'];
-    $tgl_lahir=$_POST['tanggal'];
-    $gender=$_POST['gen'];
-    $result = mysqli_query($db, 
-    "INSERT INTO data_warga(nama, nomorhp, email, alamat ,universitas, jurusan, prodi, angkatan, tgl_lahir, gender) 
-    VALUES ('$nama', '$nomorhp', '$email', '$alamat', '$universitas', '$jurusan', '$prodi', '$angkatan', '$tgl_lahir', '$gender')");
-
-    if($result){
-        echo "
-            <script>
-                alert('Data Warga Berhasil Ditambah');
-                document.location.href='tables_warga.php';
-
-            </script>
-        ";
-    }else{
-        echo "
-            <script>
-                alert('Data warga Gagal Ditambah');
-                document.location.href='tables_warga.php';
-            </script>
-        ";
-    }
-}
-?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,9 +1,13 @@
 <?php
-session_start();
-if(!isset($_SESSION['userlogin'])){
-  header("Location: ../index.php");
-  exit;
-}
+    session_start();
+    require '../konek.php';
+    if(!isset($_SESSION['login'])){
+        echo "<script>
+            alert('Silahkan login terlebih dahulu');
+            document.location.href='../index.php';
+                </script> ";
+    }
+ $result = mysqli_query($db, "SELECT * FROM data_warga");
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +20,7 @@ if(!isset($_SESSION['userlogin'])){
         <meta name="author" content="" />
         <title>Tables Data Warga</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <style>
@@ -75,7 +80,7 @@ if(!isset($_SESSION['userlogin'])){
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Data Warga Asmaba
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
@@ -83,6 +88,17 @@ if(!isset($_SESSION['userlogin'])){
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" href="tables_warga.php">Data Warga</a>
                                     <a class="nav-link" href="form.php">Form Tambah Data Warga</a>
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePage" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="far fa-plus-square"></i></div>
+                                Buat Akun
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePage" aria-labelledby="headingThree" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="akun_user.php">Akun Warga</a>
+                                    <a class="nav-link" href="akun_admin.php">Akun Admin</a>
                                 </nav>
                             </div>
                         </div>
@@ -114,83 +130,37 @@ if(!isset($_SESSION['userlogin'])){
                                             <th>Nama</th>
                                             <th>Tanggal lahir</th>
                                             <th>Nomor WhatsApp</th>
+                                            <th>Alamat</th>
                                             <th>Email</th>
                                             <th>Jenis Kelamin</th>
                                             <th>Universitas</th>
                                             <th>Fakultas</th>
                                             <th>Program Studi</th>
                                             <th>Angkatan</th>
+                                            <th colspan='2'>Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <th>Tanggal lahir</th>
-                                            <th>Nomor WhatsApp</th>
-                                            <th>Email</th>
-                                            <th>Jenis Kelamin</th>
-                                            <th>Universitas</th>
-                                            <th>Fakultas</th>
-                                            <th>Program Studi</th>
-                                            <th>Angkatan</th>
-                                        </tr>
-                                    </tfoot>
                                     <tbody>
+                                    <?php 
+                                        while($row = mysqli_fetch_array($result)){
+                                    ?>
                                         <tr>
-                                            <td>Herni Suhartati</td>
-                                            <td>11 Januari 2002</td>
-                                            <td>085334243456</td>
-                                            <td>herby.jan1102@gmail.com</td>
-                                            <td>Perempuan</td>
-                                            <td>Universitas Mulawarman</td>
-                                            <td>Teknik</td>
-                                            <td>Informatika</td>
-                                            <td>2021</td>
+                                            <td> <?=$row['nama']?> </td>
+                                            <td> <?=$row['tgl_lahir']?> </td>
+                                            <td> <?=$row['nomorhp']?> </td>
+                                            <td> <?=$row['alamat']?> </td>
+                                            <td> <?=$row['email']?> </td>
+                                            <td> <?=$row['gender']?> </td>
+                                            <td> <?=$row['universitas']?> </td>
+                                            <td> <?=$row['jurusan']?> </td>
+                                            <td> <?=$row['prodi']?> </td>
+                                            <td> <?=$row['angkatan']?> </td>
+                                            <td class="edit"><a  href="edit_data.php?id=<?=$row['id']?>"><i class="fa-solid fa-user-pen" style="color: green"></i></a></td>
+                                            <td class="hapus"><a  href="hapus_data.php?id=<?=$row['id']?>"><i class="fa-solid fa-trash" style="color: red"></i></a></td>
                                         </tr>
-                                        <tr>
-                                            <td>Tihani Nur Amalina Suwanti</td>
-                                            <td>27 Februari 2002</td>
-                                            <td>085342243409</td>
-                                            <td>tihaninur@gmail.com</td>
-                                            <td>Perempuan</td>
-                                            <td>Universitas</td>
-                                            <td>Kehutanan</td>
-                                            <td>Kehutanan</td>
-                                            <td>2021</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Lindiyanti Rofiah Qudsy</td>
-                                            <td>22 September 2003</td>
-                                            <td>085334245325</td>
-                                            <td>lindyanti@gmail.com</td>
-                                            <td>Perempuan</td>
-                                            <td>UMKT</td>
-                                            <td>Psikologi</td>
-                                            <td>S1 Psikologi</td>
-                                            <td>2021</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Raudha Faradhila Hasanadi</td>
-                                            <td>18 Juli 2003</td>
-                                            <td>082334243454</td>
-                                            <td>raudha@gmail.com</td>
-                                            <td>Perempuan</td>
-                                            <td>Universitas Mulawarman</td>
-                                            <td>FPIK</td>
-                                            <td>PGSD</td>
-                                            <td>2021</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Christin Debora</td>
-                                            <td>15 Desember 2002</td>
-                                            <td>0812344543456</td>
-                                            <td>Christian@gmail.com</td>
-                                            <td>Perempuan</td>
-                                            <td>Poltekkes Kemenkes Kaltim</td>
-                                            <td>Kebidanan</td>
-                                            <td>D4 Kebidanan dan Profesi Bidan</td>
-                                            <td>2021</td>
-                                        </tr>
+                                        <?php
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>

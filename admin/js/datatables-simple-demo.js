@@ -3,9 +3,11 @@ window.addEventListener('DOMContentLoaded', event => {
     // https://github.com/fiduswriter/Simple-DataTables/wiki
 
     const datatablesSimple = document.getElementById('datatablesSimple');
-    const datatablesSimples = document.getElementById('datatablesSimple_kegiatan');
+    // const datatablesSimples = document.getElementById('datatablesSimple2');
     if (datatablesSimple) {
         new simpleDatatables.DataTable(datatablesSimple);
-        new simpleDatatables.DataTable(datatablesSimples);
     }
+    // if (datatablesSimples) {
+    //     new simpleDatatables.DataTable(datatablesSimples);
+    // }
 });
