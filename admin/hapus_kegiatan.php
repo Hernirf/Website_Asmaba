@@ -11,14 +11,14 @@ if(isset($_GET['id'])){
     if($result){
         echo "
             <script>
-                alert('Data Warga Berhasil Dihapus');
+                alert('Jadwal kegiatan Berhasil Dihapus');
                 document.location.href='table_kegiatan.php';
             </script>
         ";
     }else{
         echo "
             <script>
-                alert('Data Warga Gagal Dihapus');
+                alert('Jadwal kegiatan Gagal Dihapus');
             </script>
         ";
     }

@@ -24,7 +24,7 @@ if(isset($_POST['btn'])){
     if($result){
         echo "
             <script>
-                alert('Jadwal kegiatan Berhasil Ditambah');
+                alert('Jadwal kegiatan Berhasil Diubah');
                 document.location.href ='table_kegiatan.php';
 
             </script>
@@ -32,7 +32,7 @@ if(isset($_POST['btn'])){
     }else{
         echo "
             <script>
-                alert('Jadwal kegiatan Gagal Ditambah');
+                alert('Jadwal kegiatan Gagal Diubah');
                 document.location.href ='table_kegiatan.php';
             </script>
         ";
